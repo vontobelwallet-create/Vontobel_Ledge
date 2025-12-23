@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vontobel Int Wallet</title>
+
+  <!-- Cashfree SDK -->
+  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f9ff;
+      color: #0a2540;
+    }
+
+    header {
+      background: linear-gradient(90deg, #4facfe, #00c6ff);
+      padding: 18px;
+      text-align: center;
+      color: white;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+    }
+
+    .balance {
+      font-size: 36px;
+      margin: 10px 0;
+      color: #0077cc;
+    }
+
+    .btn {
+      background: linear-gradient(90deg, #4facfe, #00c6ff);
+      color: white;
+      border: none;
+      padding: 14px 22px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .ledger {
+      font-size: 14px;
+      color: #444;
+      line-height: 1.7;
+    }
+
+    footer {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-box {
+      background: white;
+      padding: 25px;
+      border-radius: 14px;
+      width: 90%;
+      max-width: 380px;
+      text-align: center;
+    }
+
+    .modal-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 15px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .modal-box h3 {
+      margin-top: 0;
+    }
+
+    @media (max-width: 600px) {
+      .balance {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>Vontobel Int Wallet</header>
+
+<div class="container">
+
+  <!-- WALLET CARD -->
+  <div class="card">
+    <h3>Ledger Balance (Non-Custodial)</h3>
+    <div class="balance">₹0.00</div>
+    <button class="btn" onclick="openModal()">Add Money</button>
+  </div>
+
+  <!-- LEDGER INFO -->
+  <div class="card ledger">
+    <h3>Ledger & Balance Information</h3>
+    <p>
+      The Ledger Balance (Non-Custodial) shown on this platform is an internal ledger representation
+      used strictly for tracking transactions initiated via the Cashfree payment gateway.
+      Vontobel Int does not store or hold customer funds.
+    </p>
+    <p>
+      All payments are processed securely by RBI-regulated payment partners and are
+      settled directly into the merchant’s registered bank account.
+    </p>
+  </div>
+
+  <!-- TERMS -->
+  <div class="card">
+    <h3>Privacy Policy & Terms</h3>
+    <footer>
+      <p>
+        Vontobel Int is a software demonstration platform. We do not provide wallet,
+        banking, or stored-value services. Payments made through this platform are final
+        and subject to Cashfree’s payment policies.
+      </p>
+      <p>
+        We do not store card details, UPI IDs, or sensitive personal data. All payment
+        interactions occur on Cashfree’s secure infrastructure.
+      </p>
+      <p>
+        By proceeding with a payment, you agree to our internal ledger tracking,
+        Cashfree’s terms of service, and applicable RBI regulations.
+      </p>
+    </footer>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="amountModal">
+  
+  <div class="modal-box">
+    <div id="CloseWindow" style="width: 100%;display: flex; justify-content: flex-end; font-weight: 600;">X</div>
+    <h3>Add Money</h3>
+    <input type="number" value="10" disabled />
+    <button class="btn" onclick="proceedPayment()">Proceed</button>
+  </div>
+</div>
+
+<script>
+function openModal() {
+  document.getElementById("amountModal").style.display = "flex";
+}
+
+function proceedPayment() {
+  document.getElementById("amountModal").style.display = "none";
+  addMoney();
+}
+document.getElementById("CloseWindow").addEventListener("click",()=>{
+  document.getElementById("amountModal").style.display = "none";
+})
+
+/* ⚠️ DO NOT EDIT — CASHFREE FLOW */
+async function addMoney() {
+  const res = await fetch("https://vontobel2.onrender.com/create-order", {
+    method: "POST"
+  });
+
+  const data = await res.json();
+
+  if (!data.payment_session_id) {
+    alert("Session creation failed");
+    return;
+  }
+
+  const cashfree = Cashfree({
+    mode: "production"
+  });
+
+  cashfree.checkout({
+    paymentSessionId: data.payment_session_id
+  });
+}
+</script>
+
+</body>
+</html>
