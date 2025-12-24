@@ -171,7 +171,8 @@
   <div class="modal-box">
     <div id="CloseWindow" style="width: 100%;display: flex; justify-content: flex-end; font-weight: 600;">X</div>
     <h3>Add Money</h3>
-    <input type="number" value="10" disabled />
+    <input type="number" id="amountInput" placeholder="Enter Amount" min="1" />
+
     <button class="btn" onclick="proceedPayment()">Proceed</button>
   </div>
 </div>
@@ -191,8 +192,22 @@ document.getElementById("CloseWindow").addEventListener("click",()=>{
 
 /* ⚠️ DO NOT EDIT — CASHFREE FLOW */
 async function addMoney() {
-  const res = await fetch("https://vontobel2.onrender.com/create-order", {
-    method: "POST"
+
+  const amount = document.getElementById("amountInput").value;
+
+  if (!amount || amount <= 0) {
+    alert("Please enter a valid amount");
+    return;
+  }
+
+   const res = await fetch("https://vontobel2.onrender.com/create-order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      amount: amount
+    })
   });
 
   const data = await res.json();
