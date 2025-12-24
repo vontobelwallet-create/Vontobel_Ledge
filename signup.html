@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vontobel – Create Account</title>
+
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet"/>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI", system-ui, Arial, sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#071b8d,#0b5cff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* CONTAINER */
+.signup-wrapper{
+  width:100%;
+  max-width:460px;
+  background:#ffffff;
+  border-radius:22px;
+  box-shadow:0 25px 60px rgba(0,0,0,.35);
+  padding:34px 32px;
+}
+
+/* LOGO */
+.logo{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:26px;
+}
+
+.logo img{
+  height:44px;
+}
+
+.logo span{
+  font-size:22px;
+  font-weight:700;
+  color:#0b3cff;
+}
+
+/* HEADER */
+.signup-title{
+  text-align:center;
+  font-size:22px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.signup-sub{
+  text-align:center;
+  font-size:14px;
+  color:#6b7280;
+  margin-bottom:26px;
+}
+
+/* INPUT */
+.input-group{
+  position:relative;
+  margin-bottom:18px;
+}
+
+.input-group i{
+  position:absolute;
+  top:50%;
+  left:14px;
+  transform:translateY(-50%);
+  color:#6b7280;
+}
+
+.input-group input{
+  width:100%;
+  padding:14px 14px 14px 44px;
+  border-radius:12px;
+  border:1px solid #d1d5db;
+  font-size:15px;
+  outline:none;
+}
+
+.input-group input:focus{
+  border-color:#0b3cff;
+}
+
+/* PASSWORD TOGGLE */
+.toggle-pass{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  color:#6b7280;
+}
+
+/* TERMS */
+.terms{
+  font-size:14px;
+  color:#4b5563;
+  margin-bottom:22px;
+}
+
+.terms a{
+  color:#0b3cff;
+  font-weight:600;
+  text-decoration:none;
+}
+
+/* BUTTON */
+.signup-btn{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(135deg,#071b8d,#0b5cff);
+  border:none;
+  color:#ffffff;
+  font-size:16px;
+  font-weight:600;
+  border-radius:14px;
+  cursor:pointer;
+  box-shadow:0 12px 25px rgba(11,60,255,.35);
+}
+
+.signup-btn:hover{
+  opacity:.95;
+}
+
+/* FOOTER */
+.signup-footer{
+  margin-top:26px;
+  text-align:center;
+  font-size:14px;
+  color:#6b7280;
+}
+
+.signup-footer a{
+  color:#0b3cff;
+  font-weight:600;
+  text-decoration:none;
+}
+
+/* RESPONSIVE */
+@media(max-width:480px){
+  .signup-wrapper{
+    border-radius:18px;
+    padding:28px 22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="signup-wrapper">
+
+  <!-- LOGO -->
+  <div class="logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/V-logo.svg/2048px-V-logo.svg.png" alt="Vontobel">
+    <span>Vontobel</span>
+  </div>
+
+  <!-- TITLE -->
+  <div class="signup-title">Create Your Account</div>
+  <div class="signup-sub">
+    Register to access secure payment features and transaction tracking
+  </div>
+
+  <!-- FORM -->
+  <form>
+
+    <div class="input-group">
+      <i class="fas fa-user"></i>
+      <input type="text" placeholder="Full name" required>
+    </div>
+
+    <div class="input-group">
+      <i class="fas fa-envelope"></i>
+      <input type="email" placeholder="Email address" required>
+    </div>
+
+    <div class="input-group">
+      <i class="fas fa-phone"></i>
+      <input type="tel" placeholder="Mobile number" required>
+    </div>
+
+    <div class="input-group">
+      <i class="fas fa-lock"></i>
+      <input type="password" id="password" placeholder="Create password" required>
+      <i class="fas fa-eye toggle-pass" onclick="togglePassword('password')"></i>
+    </div>
+
+    <div class="input-group">
+      <i class="fas fa-lock"></i>
+      <input type="password" id="confirm" placeholder="Confirm password" required>
+      <i class="fas fa-eye toggle-pass" onclick="togglePassword('confirm')"></i>
+    </div>
+
+    <div class="terms">
+      By continuing, you agree to our
+      <a href="#">Terms of Service</a> and
+      <a href="#">Privacy Policy</a>.
+    </div>
+
+    <button class="signup-btn" type="submit">
+      Create Account
+    </button>
+
+  </form>
+
+  <!-- FOOTER -->
+  <div class="signup-footer">
+    Already have an account? <a href="login.html">Sign in</a>
+  </div>
+
+</div>
+
+<script>
+function togglePassword(id){
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+
+document.querySelector("form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const name = document.querySelector('input[placeholder="Full name"]').value;
+  const email = document.querySelector('input[placeholder="Email address"]').value;
+  const phone = document.querySelector('input[placeholder="Mobile number"]').value;
+  const password = document.getElementById("password").value;
+  const confirm = document.getElementById("confirm").value;
+
+  if (password !== confirm) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  try {
+    const res = await fetch("https://vontobel2.onrender.com/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, phone, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Signup failed");
+      return;
+    }
+
+    alert("Account created successfully");
+    window.location.href = "login.html";
+
+  } catch (err) {
+    alert("Server error");
+  }
+});
+
+
+</script>
+
+</body>
+</html>

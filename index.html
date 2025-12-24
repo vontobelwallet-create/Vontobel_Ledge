@@ -1,230 +1,474 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vontobel Int Wallet</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vontobel</title>
 
-  <!-- Cashfree SDK -->
-  <script src="https://sdk.cashfree.com/js/v3/cashfree.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet"/>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI", system-ui, Arial, sans-serif;
+}
 
-    body {
-      margin: 0;
-      background: #f4f9ff;
-      color: #0a2540;
-    }
+body{
+  background:#f4f6fb;
+  color:#1f2937;
+}
 
-    header {
-      background: linear-gradient(90deg, #4facfe, #00c6ff);
-      padding: 18px;
-      text-align: center;
-      color: white;
-      font-size: 22px;
-      font-weight: bold;
-    }
+/* NAVBAR */
+.navbar{
+  position:fixed;
+  top:0;
+  left:0;
+  height:64px;
+  width:100%;
+  background:#ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 22px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+  z-index:1000;
+}
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
-    }
+.nav-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      margin-bottom: 25px;
-    }
+.menu-btn{
+  font-size:22px;
+  cursor:pointer;
+  color:#0b3cff;
+}
 
-    .balance {
-      font-size: 36px;
-      margin: 10px 0;
-      color: #0077cc;
-    }
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:20px;
+  font-weight:700;
+  color:#0b3cff;
+}
 
-    .btn {
-      background: linear-gradient(90deg, #4facfe, #00c6ff);
-      color: white;
-      border: none;
-      padding: 14px 22px;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+.logo img{
+  height:36px;
+}
 
-    .btn:hover {
-      opacity: 0.9;
-    }
+/* SIDEBAR */
+.sidebar{
+  position:fixed;
+  top:64px;
+  left:0;
+  width:240px;
+  height:calc(100% - 64px);
+  background:#ffffff;
+  box-shadow:2px 0 12px rgba(0,0,0,.06);
+  padding-top:18px;
+  transition:.3s ease;
+  z-index: 1;
+}
 
-    .ledger {
-      font-size: 14px;
-      color: #444;
-      line-height: 1.7;
-    }
+.sidebar.hide{ transform:translateX(-100%); }
 
-    footer {
-      font-size: 13px;
-      color: #666;
-      line-height: 1.6;
-    }
+.sidebar a{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 26px;
+  font-size:15px;
+  text-decoration:none;
+  color:#374151;
+}
 
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
+.sidebar a:hover{
+  background:#eef3ff;
+  color:#0b3cff;
+}
 
-    .modal-box {
-      background: white;
-      padding: 25px;
-      border-radius: 14px;
-      width: 90%;
-      max-width: 380px;
-      text-align: center;
-    }
+/* MAIN */
+.main{
+  margin-top:88px;
+  margin-left:260px;
+  padding:24px;
+  transition:.3s;
+}
 
-    .modal-box input {
-      width: 100%;
-      padding: 12px;
-      margin: 15px 0;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
+.main.full{ margin-left:24px; }
 
-    .modal-box h3 {
-      margin-top: 0;
-    }
+/* BALANCE CARD */
+.balance-card{
+  background:linear-gradient(135deg,#071b8d,#0b5cff);
+  color:#ffffff;
+  border-radius:18px;
+  padding:30px;
+  box-shadow:0 14px 30px rgba(11,60,255,.35);
+}
 
-    @media (max-width: 600px) {
-      .balance {
-        font-size: 28px;
-      }
-    }
-  </style>
+.balance-card h3{
+  font-size:15px;
+  opacity:.9;
+}
+
+.balance-amount{
+  font-size:40px;
+  font-weight:700;
+  margin:16px 0;
+}
+
+.checkout-btn{
+  background:#ffffff;
+  color:#0b3cff;
+  border:none;
+  padding:12px 26px;
+  font-size:15px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* SERVICES */
+.services{
+  margin-top:30px;
+}
+
+.services-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.search-box{
+  position:relative;
+}
+
+.search-box input{
+  padding:10px 14px 10px 36px;
+  border-radius:10px;
+  border:1px solid #d1d5db;
+}
+
+.search-box i{
+  position:absolute;
+  top:50%;
+  left:12px;
+  transform:translateY(-50%);
+  color:#6b7280;
+}
+
+.service-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:18px;
+}
+
+.service-card{
+  background:#ffffff;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 10px 22px rgba(0,0,0,.06);
+  text-align:center;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.service-card:hover{
+  transform:translateY(-4px);
+}
+
+.service-card i{
+  font-size:26px;
+  color:#0b3cff;
+  margin-bottom:12px;
+}
+
+.service-card h4{
+  font-size:15px;
+  margin-bottom:6px;
+}
+
+.service-card p{
+  font-size:13px;
+  color:#6b7280;
+}
+
+/* ADS */
+.ad-banner{
+  margin-top:30px;
+  background:#ffffff;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 10px 22px rgba(0,0,0,.06);
+  display:flex;
+  gap:20px;
+  align-items:center;
+}
+
+.ad-banner img{
+  width:160px;
+  border-radius:14px;
+}
+
+.ad-banner h3{
+  color:#0b3cff;
+  margin-bottom:8px;
+}
+
+/* SECTIONS */
+.section{
+  background:#ffffff;
+  border-radius:18px;
+  padding:26px;
+  margin-top:26px;
+  box-shadow:0 10px 22px rgba(0,0,0,.06);
+}
+
+.section h2{
+  margin-bottom:14px;
+  color:#0b3cff;
+}
+
+.section p{
+  line-height:1.7;
+  font-size:15px;
+  color:#374151;
+}
+
+/* FOOTER */
+footer{
+  margin-top:50px;
+  padding:22px;
+  text-align:center;
+  font-size:13px;
+  color:#6b7280;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{ transform:translateX(-100%); }
+  .sidebar.show{ transform:translateX(0); }
+  .main{ margin-left:20px; }
+  .ad-banner{ flex-direction:column; text-align:center; }
+}
+</style>
 </head>
 
 <body>
 
-<header>Vontobel Int Wallet</header>
-
-<div class="container">
-
-  <!-- WALLET CARD -->
-  <div class="card">
-    <h3>Ledger Balance (Non-Custodial)</h3>
-    <div class="balance">₹0.00</div>
-    <button class="btn" onclick="openModal()">Add Money</button>
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="nav-left">
+    <i class="fas fa-bars menu-btn" onclick="toggleSidebar()"></i>
+    <div class="logo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/V-logo.svg/2048px-V-logo.svg.png">
+      Vontobel
+    </div>
   </div>
-
-  <!-- LEDGER INFO -->
-  <div class="card ledger">
-    <h3>Ledger & Balance Information</h3>
-    <p>
-      The Ledger Balance (Non-Custodial) shown on this platform is an internal ledger representation
-      used strictly for tracking transactions initiated via the Cashfree payment gateway.
-      Vontobel Int does not store or hold customer funds.
-    </p>
-    <p>
-      All payments are processed securely by RBI-regulated payment partners and are
-      settled directly into the merchant’s registered bank account.
-    </p>
-  </div>
-
-  <!-- TERMS -->
-  <div class="card">
-    <h3>Privacy Policy & Terms</h3>
-    <footer>
-      <p>
-        Vontobel Int is a software demonstration platform. We do not provide wallet,
-        banking, or stored-value services. Payments made through this platform are final
-        and subject to Cashfree’s payment policies.
-      </p>
-      <p>
-        We do not store card details, UPI IDs, or sensitive personal data. All payment
-        interactions occur on Cashfree’s secure infrastructure.
-      </p>
-      <p>
-        By proceeding with a payment, you agree to our internal ledger tracking,
-        Cashfree’s terms of service, and applicable RBI regulations.
-      </p>
-    </footer>
-  </div>
-
 </div>
 
-<!-- MODAL -->
-<div class="modal" id="amountModal">
-  
-  <div class="modal-box">
-    <div id="CloseWindow" style="width: 100%;display: flex; justify-content: flex-end; font-weight: 600;">X</div>
-    <h3>Add Money</h3>
-    <input type="number" id="amountInput" placeholder="Enter Amount" min="1" />
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <a href="#"><i class="fas fa-house"></i> Home</a>
+  <a href="#"><i class="fas fa-user"></i> Account</a>
+  <a href="#"><i class="fas fa-file-contract"></i> Privacy & Terms</a>
+  <a href="#"><i class="fas fa-right-from-bracket"></i> Logout</a>
+</div>
 
-    <button class="btn" onclick="proceedPayment()">Proceed</button>
+<!-- MAIN -->
+<div class="main" id="main">
+
+  <!-- BALANCE -->
+  <div class="balance-card">
+    <h3>Available Balance</h3>
+    <div class="balance-amount" id="Balance">₹ 0.00</div>
+    <button class="checkout-btn">Proceed to Checkout</button>
   </div>
+
+  <!-- SERVICES -->
+  <div class="services">
+    <div class="services-header">
+      <h2>Services</h2>
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Search services">
+      </div>
+    </div>
+
+    <div class="service-grid">
+      <div class="service-card">
+        <i class="fas fa-chart-line"></i>
+        <h4>Check Balance</h4>
+        <p>View transaction summary</p>
+      </div>
+
+      <div class="service-card">
+        <i class="fas fa-plus-circle"></i>
+        <h4>Add Balance</h4>
+        <p>Initiate payment flow</p>
+      </div>
+
+      <div class="service-card">
+        <i class="fas fa-qrcode"></i>
+        <h4>Active UPI</h4>
+        <p>Use supported UPI apps</p>
+      </div>
+
+      <div class="service-card">
+        <i class="fas fa-shield-check"></i>
+        <h4>Cashfree Terms</h4>
+        <p>Gateway policies</p>
+      </div>
+
+      <div class="service-card">
+        <i class="fas fa-money-bill-transfer"></i>
+        <h4>Withdrawal</h4>
+        <p>Request settlement</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- AD -->
+  <div class="ad-banner">
+    <img src="https://media.licdn.com/dms/image/v2/D4E12AQHW9W4AeD3LPQ/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1687987481846?e=2147483647&v=beta&t=wx3Ihre1x1-YhY6-nwzu3d80D0MI9-fJ0k4lQEp78YM">
+    <div>
+      <h3>Fast & Secure Payments</h3>
+      <p>Powered by Cashfree with industry-grade security, compliance, and real-time tracking.</p>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="section">
+    <h2>How Vontobel Works</h2>
+    <p>
+      Vontobel demonstrates modern payment workflows using secure server-side order creation
+      and gateway-handled authorization. When a transaction is initiated, a unique order
+      reference is generated and forwarded to the payment partner for processing. The gateway
+      manages authentication, validation, and confirmation, returning a verified status.
+      Vontobel records this status for transparency and reporting purposes only. No sensitive
+      payment data is stored on the platform, ensuring compliance with security standards and
+      regulatory expectations.
+    </p>
+  </div>
+
+
+  <!-- TRUST -->
+<div class="section">
+  <h2>Trusted Payment Infrastructure</h2>
+  <img src="https://i.imgur.com/kq9nU0O.png" alt="">
+  <p>
+    Vontobel is designed to demonstrate enterprise-grade payment workflows using trusted
+    RBI-regulated payment infrastructure. The platform does not act as a wallet or hold
+    customer funds. All monetary transactions are securely processed by Cashfree, ensuring
+    compliance with Indian payment regulations and banking standards. By separating payment
+    processing from application logic, Vontobel ensures enhanced security, reduced liability,
+    and transparent reconciliation. Each transaction is mapped to a unique order ID, allowing
+    accurate tracking, verification, and dispute handling. This architecture closely mirrors
+    real-world fintech systems used by leading payment applications in India.
+  </p>
+</div>
+
+<!-- SECURITY -->
+<div class="section">
+  <h2>Security & Data Protection</h2>
+  <img src="https://i.imgur.com/5F8jv0M.png" alt="">
+  <p>
+    User security is central to the Vontobel platform. No sensitive information such as card
+    numbers, CVV, or UPI credentials is ever stored on the server or frontend. Payment data is
+    handled exclusively by the payment gateway using encrypted channels and tokenization
+    standards. Sessions are secured using HTTP-only cookies and backend validation to prevent
+    unauthorized access. This approach significantly reduces the risk of data breaches and
+    aligns with modern fintech security best practices.
+  </p>
+</div>
+
+<!-- COMPLIANCE -->
+<div class="section">
+  <h2>Compliance & Transparency</h2>
+  <img src="https://i.imgur.com/IFJp5V5.png" alt="">
+  <p>
+    Vontobel follows a compliance-first design philosophy. The platform is built strictly as a
+    payment interface and does not provide wallet services or store balances internally.
+    Transaction records are maintained only for reference and verification. This ensures full
+    transparency for users and merchants while avoiding regulatory complications related to
+    prepaid instruments. By relying on licensed payment partners, Vontobel maintains a clean,
+    compliant, and scalable architecture suitable for production-grade payment demonstrations.
+  </p>
+</div>
+
+  <footer>
+    © 2025 Vontobel • Secure Digital Payments • Powered by Cashfree
+  </footer>
+
 </div>
 
 <script>
-function openModal() {
-  document.getElementById("amountModal").style.display = "flex";
-}
+function toggleSidebar(){
+  const sidebar = document.getElementById("sidebar");
+  const main = document.getElementById("main");
 
-function proceedPayment() {
-  document.getElementById("amountModal").style.display = "none";
-  addMoney();
-}
-document.getElementById("CloseWindow").addEventListener("click",()=>{
-  document.getElementById("amountModal").style.display = "none";
-})
-
-/* ⚠️ DO NOT EDIT — CASHFREE FLOW */
-async function addMoney() {
-
-  const amount = document.getElementById("amountInput").value;
-
-  if (!amount || amount <= 0) {
-    alert("Please enter a valid amount");
-    return;
+  if(window.innerWidth <= 768){
+    sidebar.classList.toggle("show");
+  }else{
+    sidebar.classList.toggle("hide");
+    main.classList.toggle("full");
   }
-
-   const res = await fetch("https://vontobel2.onrender.com/create-order", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      amount: amount
-    })
-  });
-
-  const data = await res.json();
-
-  if (!data.payment_session_id) {
-    alert("Session creation failed");
-    return;
-  }
-
-  const cashfree = Cashfree({
-    mode: "production"
-  });
-
-  cashfree.checkout({
-    paymentSessionId: data.payment_session_id
-  });
 }
+
+/* 🔍 SERVICE SEARCH */
+document.querySelector(".search-box input").addEventListener("input", function () {
+  const value = this.value.toLowerCase();
+  document.querySelectorAll(".service-card").forEach(card => {
+    card.style.display = card.innerText.toLowerCase().includes(value)
+      ? "block"
+      : "none";
+  });
+});
+
+
+
+
+
+
+
+async function loadUserInfo() {
+  try {
+    const res = await fetch("https://vontobel2.onrender.com/user_info", {
+      method: "GET",
+      credentials: "include" // 🔐 VERY IMPORTANT for session cookies
+    });
+
+    // Session expired or unauthorized
+    if (res.status === 401 || res.status === 403) {
+      window.location.href = "/login.html";
+      return;
+    }
+
+    const data = await res.json();
+
+    if (!data || !data.balance) {
+      window.location.href = "/login.html";
+      return;
+    }
+
+    // ✅ Update balance UI
+    document.getElementById("Balance").innerText =
+      "₹ " + Number(data.balance).toFixed(2);
+
+  } catch (err) {
+    console.error("User session check failed", err);
+    window.location.href = "/login.html";
+  }
+}
+
+// Load on page open
+loadUserInfo();
 </script>
 
 </body>
