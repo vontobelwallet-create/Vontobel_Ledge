@@ -275,7 +275,7 @@ footer{
 
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
-  <a href="#"><i class="fas fa-house"></i> Home</a>
+  <a href="/"><i class="fas fa-house"></i> Home</a>
   <a href="Account.html"><i class="fas fa-user"></i> Account</a>
   <a href="#"><i class="fas fa-file-contract"></i> Privacy & Terms</a>
   <a href="#"><i class="fas fa-right-from-bracket"></i> Logout</a>
@@ -447,6 +447,7 @@ async function loadUserInfo() {
     // Session expired or unauthorized
     if (res.status === 401 || res.status === 403) {
      console.log("err")
+     window.location.href="https://vontobelwallet-create.github.io/Vontobel_Ledge/login.html"
       return;
     }
 
@@ -454,6 +455,7 @@ async function loadUserInfo() {
 
     if (!data) {
       console.log(data)
+      window.location.href="https://vontobelwallet-create.github.io/Vontobel_Ledge/login.html"
       return;
     }
 
@@ -463,7 +465,7 @@ async function loadUserInfo() {
 
   } catch (err) {
     console.error("User session check failed", err);
-   
+   window.location.href="https://vontobelwallet-create.github.io/Vontobel_Ledge/login.html"
   }
 }
 
