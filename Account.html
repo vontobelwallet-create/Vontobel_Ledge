@@ -452,15 +452,7 @@ function toggleSidebar(){
   }
 }
 
-/* 🔍 SERVICE SEARCH */
-document.querySelector(".search-box input").addEventListener("input", function () {
-  const value = this.value.toLowerCase();
-  document.querySelectorAll(".service-card").forEach(card => {
-    card.style.display = card.innerText.toLowerCase().includes(value)
-      ? "block"
-      : "none";
-  });
-});
+
 
 
 
