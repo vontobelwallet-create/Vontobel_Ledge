@@ -446,14 +446,14 @@ async function loadUserInfo() {
 
     // Session expired or unauthorized
     if (res.status === 401 || res.status === 403) {
-      window.location.href = "/login.html";
+     window.location.href = "https://vontobelwallet-create.github.io/Vontobel_Ledge/login.html";
       return;
     }
 
     const data = await res.json();
 
-    if (!data || !data.balance) {
-      window.location.href = "/login.html";
+    if (!data) {
+      window.location.href = "https://vontobelwallet-create.github.io/Vontobel_Ledge/login.html";
       return;
     }
 
