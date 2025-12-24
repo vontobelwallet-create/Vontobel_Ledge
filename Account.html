@@ -428,7 +428,7 @@ footer{
     <h3>Add Money</h3>
     <input type="number" id="amountInput" placeholder="Enter Amount" min="1" />
 
-    <button class="btn" onclick="proceedPayment()">Proceed</button>
+    <button class="checkout-btn" onclick="proceedPayment()">Proceed</button>
   </div>
 </div>
 
@@ -482,7 +482,7 @@ async function loadUserInfo() {
 
     // ✅ Update balance UI
     document.getElementById("Balance").innerText =
-      "₹ " + Number(data.balance).toFixed(2);
+      "" + Number(data.balance).toFixed(2);
 
   } catch (err) {
     console.error("User session check failed", err);
@@ -516,6 +516,7 @@ async function addMoney() {
 
    const res = await fetch("https://vontobel2.onrender.com/create-order", {
     method: "POST",
+     credentials: "include",
     headers: {
       "Content-Type": "application/json"
     },
