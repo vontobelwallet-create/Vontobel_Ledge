@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Payment Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f9ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: #fff;
+      width: 90%;
+      max-width: 420px;
+      border-radius: 14px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #0a2540;
+    }
+
+    .status {
+      font-size: 20px;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+
+    .success {
+      color: #1a9c5e;
+    }
+
+    .failed {
+      color: #d93025;
+    }
+
+    .pending {
+      color: #ff9800;
+    }
+
+    .info {
+      font-size: 14px;
+      color: #555;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #4facfe, #00c6ff);
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Payment Status</h2>
+
+  <div id="status" class="status pending">Checking payment...</div>
+
+  <div id="details" class="info"></div>
+
+  <button class="btn" onclick="goHome()">Back to Wallet</button>
+</div>
+
+<script>
+const orderId = new URLSearchParams(window.location.search).get("order_id");
+
+if (!orderId) {
+  document.getElementById("status").textContent = "Invalid Order";
+  document.getElementById("status").className = "status failed";
+} else {
+  fetch(`https://vontobel2.onrender.com/verify-payment/${orderId}`)
+    .then(res => res.json())
+    .then(data => {
+      const statusEl = document.getElementById("status");
+      const detailsEl = document.getElementById("details");
+
+      if (data.order_status === "PAID") {
+        statusEl.textContent = "Payment Successful ✅";
+        statusEl.className = "status success";
+      } 
+      else if (data.order_status === "ACTIVE") {
+        statusEl.textContent = "Payment Pending ⏳";
+        statusEl.className = "status pending";
+      } 
+      else {
+        statusEl.textContent = "Payment Failed ❌";
+        statusEl.className = "status failed";
+      }
+
+      detailsEl.innerHTML = `
+        <strong>Order ID:</strong> ${data.order_id}<br>
+        <strong>Amount:</strong> ₹${data.order_amount}<br>
+        <strong>Status:</strong> ${data.order_status}
+      `;
+    })
+    .catch(() => {
+      document.getElementById("status").textContent = "Verification Error";
+      document.getElementById("status").className = "status failed";
+    });
+}
+
+function goHome() {
+  window.location.href = "https://vontobelwallet-create.github.io/Vontobel_Ledge/";
+}
+</script>
+
+</body>
+</html>
