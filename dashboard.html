@@ -395,7 +395,9 @@ if (!orderId) {
   document.getElementById("status").textContent = "Invalid Order";
   document.getElementById("status").className = "status failed";
 } else {
-  fetch(`https://vontobel2.onrender.com/verify-payment/${orderId}`)
+fetch(`https://vontobel2.onrender.com/verify-payment/${orderId}`, {
+  credentials: "include"
+})
     .then(res => res.json())
     .then(data => {
       const statusEl = document.getElementById("status");
