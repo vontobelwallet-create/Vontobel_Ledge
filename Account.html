@@ -371,8 +371,8 @@ footer{
 
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
-  <a href="#"><i class="fas fa-house"></i> Home</a>
-  <a href="#"><i class="fas fa-user"></i> Account</a>
+  <a href="index.html"><i class="fas fa-house"></i> Home</a>
+  <a href="Account.html"><i class="fas fa-user"></i> Account</a>
   <a href="#"><i class="fas fa-file-contract"></i> Privacy & Terms</a>
   <a href="#"><i class="fas fa-right-from-bracket"></i> Logout</a>
 </div>
@@ -483,6 +483,10 @@ async function loadUserInfo() {
     // ✅ Update balance UI
     document.getElementById("Balance").innerText =
       "" + Number(data.balance).toFixed(2);
+
+      document.getElementById("userEmail").innerHTML =data.email;
+      document.getElementById("userPhone").innerHTML =data.phone;
+       document.getElementById("userName").innerHTML =data.name;
 
   } catch (err) {
     console.error("User session check failed", err);
