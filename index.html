@@ -466,7 +466,7 @@ footer{
 </div>
 
 
-  <!-- AD -->
+
   <div class="info-diving">
     <img src="https://media.licdn.com/dms/image/v2/D4E12AQHW9W4AeD3LPQ/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1687987481846?e=2147483647&v=beta&t=wx3Ihre1x1-YhY6-nwzu3d80D0MI9-fJ0k4lQEp78YM">
     <div>
@@ -533,9 +533,22 @@ footer{
     compliant, and scalable architecture suitable for production-grade payment demonstrations.
   </p>
 </div>
+<div style="
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+  padding:14px;
+  border-radius:10px;
+  font-size:13px;
+  color:#7c2d12;
+  margin-bottom:18px;
+">
+⚠️ <b>Demo Application:</b>  
+Vontobel is a <b>simulation project</b> for educational purposes only.
+No real money, UPI, or banking services are provided.
+</div>
 
   <footer>
-    © 2025 Vontobel • Secure Digital Payments • Powered by Cashfree
+    © 2025 Vontobel • Secure Digital Model • Powered by Cashfree
   </footer>
 
 </div>
@@ -610,6 +623,32 @@ setInterval(loadUserInfo, 5000);
 /* ===============================
    ACTIVATE UPI (SAFE)
 ================================= */
+/* ===============================
+   UPI MODAL HELPERS
+================================= */
+function showUpiModal({ icon, color, title, text }) {
+  const modal = document.getElementById("upiStatusBox");
+  const iconEl = document.getElementById("upiIcon");
+
+  // Reset icon
+  iconEl.className = "";
+  iconEl.style.color = color;
+
+  if (icon === "check") {
+    iconEl.className = "fas fa-check";
+  } else {
+    iconEl.className = "fas fa-info-circle";
+  }
+
+  document.getElementById("upiTitle").innerText = title;
+  document.getElementById("upiText").innerText = text;
+
+  modal.style.display = "block";
+}
+
+function closeUpiBox() {
+  document.getElementById("upiStatusBox").style.display = "none";
+}
 let upiProcessing = false;
 
 async function activateUPI() {
