@@ -432,11 +432,11 @@ footer{
 </div>
 
 
-      <div class="service-card">
-        <i class="fas fa-shield-check"></i>
-        <h4>Vontobel Terms</h4>
-        <p>Vontobel policies</p>
-      </div>
+    <div class="service-card" onclick="openSendMoneyModal()">
+  <i class="fas fa-paper-plane"></i>
+  <h4>Send Money</h4>
+  <p>UPI Transfer</p>
+</div>
 
       <div class="service-card">
         <i class="fas fa-money-bill-transfer"></i>
@@ -464,6 +464,41 @@ footer{
     Done
   </button>
 </div>
+
+
+
+
+
+
+
+
+
+<div class="modal" id="sendMoneyModal">
+  <div class="modal-box">
+    <span class="close-btn" onclick="closeSendMoneyModal()">×</span>
+
+    <h3>Send Money</h3>
+
+    <input type="text" id="sendUpi" placeholder="Receiver UPI ID" />
+    <input type="number" id="sendAmount" placeholder="Amount" min="1" />
+
+    <button class="checkout-btn" onclick="sendMoney()">Send</button>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="modal" id="sendSuccessModal">
+  <div class="modal-box" style="text-align:center">
+    <div style="font-size:48px;color:#16a34a">✔</div>
+    <h3>Transfer Successful</h3>
+    <p>Money sent successfully</p>
+    <button class="checkout-btn" onclick="closeSuccess()">Done</button>
+  </div>
+</div>
+
+
+
+
 
 
 
@@ -685,6 +720,52 @@ async function activateUPI() {
     alert("UPI activation failed.");
   } finally {
     upiProcessing = false;
+  }
+}
+
+
+
+function openSendMoneyModal() {
+  document.getElementById("sendMoneyModal").style.display = "flex";
+}
+
+function closeSendMoneyModal() {
+  document.getElementById("sendMoneyModal").style.display = "none";
+}
+
+function closeSuccess() {
+  document.getElementById("sendSuccessModal").style.display = "none";
+}
+
+async function sendMoney() {
+  const upi = document.getElementById("sendUpi").value.trim();
+  const amount = Number(document.getElementById("sendAmount").value);
+
+  if (!upi || amount <= 0) {
+    alert("Enter valid UPI and amount");
+    return;
+  }
+
+  try {
+    const res = await fetch("https://vontobel2.onrender.com/send-money", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ upi, amount })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Transfer failed");
+      return;
+    }
+
+    closeSendMoneyModal();
+    document.getElementById("sendSuccessModal").style.display = "flex";
+
+  } catch (err) {
+    alert("Server error");
   }
 }
 

@@ -399,6 +399,10 @@ footer{
       <span class="label">Phone</span>
       <span class="value" id="userPhone">—</span>
     </div>
+     <div class="user-row">
+      <span class="label">UPI</span>
+      <span class="value" id="userUpi">—</span>
+    </div>
   </div>
 
   <!-- DIVIDER -->
@@ -408,7 +412,7 @@ footer{
   <div class="balance-section">
     <span class="balance-label">Available Balance</span>
     <div class="balance-amount">
-      ₹ <span id="Balance">0.00</span>
+      <span id="Balance">Loading..</span>
     </div>
   </div>
 
@@ -532,11 +536,12 @@ async function loadUserInfo() {
 
     // ✅ Update balance UI
     document.getElementById("Balance").innerText =
-      "" + Number(data.balance).toFixed(2);
+      "₹ " + Number(data.balance).toFixed(2);
 
       document.getElementById("userEmail").innerHTML =data.email;
       document.getElementById("userPhone").innerHTML =data.phone;
        document.getElementById("userName").innerHTML =data.name;
+       document.getElementById("userUpi").innerHTML =data.upi;
 
   } catch (err) {
     console.error("User session check failed", err);
