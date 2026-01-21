@@ -373,8 +373,8 @@ footer{
 <div class="sidebar" id="sidebar">
   <a href="index.html"><i class="fas fa-house"></i> Home</a>
   <a href="Account.html"><i class="fas fa-user"></i> Account</a>
-  <a href="#"><i class="fas fa-file-contract"></i> Privacy & Terms</a>
-  <a href="#"><i class="fas fa-right-from-bracket"></i> Logout</a>
+  <a href="#privacy"><i class="fas fa-file-contract"></i> Privacy & Terms</a>
+  <a href="logout"><i class="fas fa-right-from-bracket"></i> Logout</a>
 </div>
 
 <!-- MAIN -->
@@ -478,13 +478,47 @@ footer{
 <div class="modal" id="amountModal">
   
   <div class="modal-box">
-    <div id="CloseWindow" style="width: 100%;display: flex; justify-content: flex-end; font-weight: 600;">X</div>
+    <div id="CloseWindow" style="width: 100%;display: flex; justify-content: flex-end;color:#6b7280; font-weight: 600;">✕</div>
     <h3>Add Money</h3>
     <input type="number" id="amountInput" placeholder="Enter Amount" min="1" />
 
     <button class="checkout-btn" onclick="proceedPayment()">Proceed</button>
   </div>
 </div>
+
+
+
+
+<div class="section" id="privacy">
+  <h2>Privacy Policy</h2>
+  <p>
+    Vontobel is a demonstration platform developed for educational and testing
+    purposes only. We respect user privacy and are committed to protecting the
+    information shared while using this application. The platform may collect
+    basic account details such as name, email address, phone number, and
+    simulated wallet data strictly to demonstrate authentication, session
+    handling, and transaction workflows.
+  </p>
+
+  <p>
+    Vontobel does not provide real banking, payment, or financial services.
+    All balances, UPI IDs, and transactions displayed are simulated and have
+    no real-world monetary value. Sensitive financial information such as
+    card details, bank credentials, or real UPI access is never collected
+    or stored.
+  </p>
+
+  <p>
+    User sessions are managed securely using standard web security practices.
+    Data is not shared with third parties and is used only within the scope
+    of application functionality. By using this platform, you acknowledge
+    that Vontobel is a non-commercial demonstration project intended solely
+    for learning and development purposes.
+  </p>
+</div>
+
+
+
 
 
   <footer>
@@ -518,34 +552,46 @@ async function loadUserInfo() {
   try {
     const res = await fetch("https://vontobel2.onrender.com/user_info", {
       method: "GET",
-      credentials: "include" // 🔐 VERY IMPORTANT for session cookies
+      credentials: "include" // 🔐 required for session cookies
     });
 
-    // Session expired or unauthorized
+    // 🔴 Session expired / unauthorized
     if (res.status === 401 || res.status === 403) {
-     console.log("err")
+      window.location.replace(
+        "https://vontobelwallet-create.github.io/Vontobel_Ledge/login.html"
+      );
       return;
+    }
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch user info");
     }
 
     const data = await res.json();
 
-    if (!data) {
-      console.log(data)
+    if (!data || !data.email) {
+      window.location.replace(
+        "https://vontobelwallet-create.github.io/Vontobel_Ledge/login.html"
+      );
       return;
     }
 
-    // ✅ Update balance UI
+    // ✅ Update UI safely
     document.getElementById("Balance").innerText =
-      "₹ " + Number(data.balance).toFixed(2);
+      "₹ " + Number(data.balance || 0).toFixed(2);
 
-      document.getElementById("userEmail").innerHTML =data.email;
-      document.getElementById("userPhone").innerHTML =data.phone;
-       document.getElementById("userName").innerHTML =data.name;
-       document.getElementById("userUpi").innerHTML =data.upi;
+    document.getElementById("userEmail").textContent = data.email || "-";
+    document.getElementById("userPhone").textContent = data.phone || "-";
+    document.getElementById("userName").textContent = data.name || "-";
+    document.getElementById("userUpi").textContent = data.upi || "Not activated";
 
   } catch (err) {
-    console.error("User session check failed", err);
-   
+    console.error("User session check failed:", err);
+
+    // 🔴 Network / server error → force login
+    window.location.replace(
+      "https://vontobelwallet-create.github.io/Vontobel_Ledge/login.html"
+    );
   }
 }
 
