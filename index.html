@@ -200,7 +200,7 @@ body{
 }
 
 /* ADS */
-.info-banner{
+.info-diving{
   margin-top:30px;
   background:#ffffff;
   border-radius:18px;
@@ -211,12 +211,12 @@ body{
   align-items:center;
 }
 
-.info-banner img{
+.info-diving img{
   width:160px;
   border-radius:14px;
 }
 
-.info-banner h3{
+.info-diving h3{
   color:#0b3cff;
   margin-bottom:8px;
 }
@@ -255,7 +255,7 @@ footer{
   .sidebar{ transform:translateX(-100%); }
   .sidebar.show{ transform:translateX(0); }
   .main{ margin-left:20px; }
-  .info-banner{ flex-direction:column; text-align:center; }
+  .info-diving{ flex-direction:column; text-align:center; }
 }
 
 
@@ -467,10 +467,10 @@ footer{
 
 
   <!-- AD -->
-  <div class="info-banner">
+  <div class="info-diving">
     <img src="https://media.licdn.com/dms/image/v2/D4E12AQHW9W4AeD3LPQ/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1687987481846?e=2147483647&v=beta&t=wx3Ihre1x1-YhY6-nwzu3d80D0MI9-fJ0k4lQEp78YM">
     <div>
-      <h3>Fast & Secure Payments</h3>
+      <h3>Fast & Secure</h3>
       <p>Powered by Cashfree with industry-grade security, compliance, and real-time tracking.</p>
     </div>
   </div>
@@ -607,63 +607,80 @@ setInterval(loadUserInfo, 5000);
 
 
 
-function closeUpiBox(){
-  document.getElementById("upiStatusBox").style.display="none";
-}
+/* ===============================
+   ACTIVATE UPI (SAFE)
+================================= */
+let upiProcessing = false;
 
-/* 🔑 ACTIVATE UPI */
 async function activateUPI() {
+  if (upiProcessing) return;
+  upiProcessing = true;
+
   try {
     const res = await fetch("https://vontobel2.onrender.com/user_info", {
       credentials: "include"
     });
 
-    if (!res.ok) return alert("Session expired");
-
-    const user = await res.json();
-
-    // If already activated
-    if (user.upi) {
-      document.getElementById("upiIcon").style.color = "#0b3cff";
-      document.getElementById("upiIcon").innerText = "ℹ";
-      document.getElementById("upiTitle").innerText = "UPI Already Activated";
-      document.getElementById("upiText").innerText =
-        `Your UPI ID: ${user.upi}`;
-      document.getElementById("upiStatusBox").style.display="block";
+    if (!res.ok) {
+      alert("Session expired. Please login again.");
       return;
     }
 
-    // Get first name
-    const firstName = user.name.split(" ")[0].toLowerCase();
+    const user = await res.json();
 
-    // Random suffix
-    const suffix = Math.random().toString(36).substring(2,6);
+    // Already activated
+    if (user.upi) {
+      showUpiModal({
+        icon: "info",
+        color: "#0b3cff",
+        title: "UPI Already Activated",
+        text: `Your UPI ID:\n${user.upi}`
+      });
+      return;
+    }
 
+    // Generate display-only UPI
+    const firstName =
+      user.name?.split(" ")[0]?.toLowerCase() || "user";
+    const suffix = Math.random().toString(36).substring(2, 6);
     const upiId = `${firstName}${suffix}@vontobelnetbanking`;
 
-    // Save to DB
     const save = await fetch("https://vontobel2.onrender.com/activate-upi", {
-      method:"POST",
-      credentials:"include",
-      headers:{ "Content-Type":"application/json" },
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ upi: upiId })
     });
 
-    if (!save.ok) throw new Error("Failed");
+    const result = await save.json();
 
-    document.getElementById("upiIcon").style.color="#16a34a";
-    document.getElementById("upiIcon").innerText="✔";
-    document.getElementById("upiTitle").innerText="UPI Activated";
-    document.getElementById("upiText").innerText =
-      `Your UPI ID: ${upiId}\nYou can now send money.`;
+    // Backend says already exists
+    if (save.status === 409) {
+      showUpiModal({
+        icon: "info",
+        color: "#0b3cff",
+        title: "UPI Already Activated",
+        text: `Your UPI ID:\n${result.upi}`
+      });
+      return;
+    }
 
-    document.getElementById("upiStatusBox").style.display="block";
+    if (!save.ok) throw new Error("Activation failed");
+
+    showUpiModal({
+      icon: "check",
+      color: "#16a34a",
+      title: "UPI Activated",
+      text: `Your UPI ID:\n${result.upi}\n\nYou can now send money.`
+    });
 
   } catch (err) {
-    alert("UPI activation failed");
+    console.error("UPI error:", err);
+    alert("UPI activation failed. Please try again.");
+  } finally {
+    upiProcessing = false;
   }
 }
-
 
 </script>
 
