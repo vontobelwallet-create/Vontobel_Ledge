@@ -374,7 +374,10 @@ footer{
   <a href="index.html"><i class="fas fa-house"></i> Home</a>
   <a href="Account.html"><i class="fas fa-user"></i> Account</a>
   <a href="#privacy"><i class="fas fa-file-contract"></i> Privacy & Terms</a>
-  <a href="logout"><i class="fas fa-right-from-bracket"></i> Logout</a>
+  <a href="javascript:void(0)" onclick="logoutUser()">
+  <i class="fas fa-right-from-bracket"></i> Logout
+</a>
+
 </div>
 
 <!-- MAIN -->
@@ -698,6 +701,35 @@ async function withdrawMoney(){
 function closeWithdrawModal() {
   document.getElementById("withdrawModal").style.display = "none";
 }
+
+
+
+
+
+
+
+
+async function logoutUser() {
+  try {
+    await fetch("https://vontobel2.onrender.com/logout", {
+      method: "GET",          // using GET as you requested
+      credentials: "include"  // 🔐 ensures session cookie is sent
+    });
+
+    // ✅ Always redirect to login after logout
+    window.location.href =
+      "https://vontobelwallet-create.github.io/Vontobel_Ledge/login.html";
+
+  } catch (err) {
+    console.error("Logout failed:", err);
+
+    // fallback redirect
+    window.location.href =
+      "https://vontobelwallet-create.github.io/Vontobel_Ledge/login.html";
+  }
+}
+
+
 
 
 </script>
