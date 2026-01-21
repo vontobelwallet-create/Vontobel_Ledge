@@ -417,8 +417,58 @@ footer{
     <i class="fas fa-plus-circle"></i>
     Add Money
   </button>
+  <button class="checkout-btn" style="margin-top:12px;background:#16a34a" onclick="openWithdrawModal()">
+  <i class="fas fa-arrow-up"></i>
+  Withdraw Money
+</button>
+
 
 </div>
+
+
+
+<div class="modal" id="withdrawModal">
+  <div class="modal-box" style="position:relative">
+
+    <!-- ❌ Close button -->
+    <span 
+      onclick="closeWithdrawModal()"
+      style="
+        position:absolute;
+        top:12px;
+        right:14px;
+        font-size:18px;
+        cursor:pointer;
+        font-weight:600;
+        color:#6b7280;
+      ">
+      ✕
+    </span>
+
+    <h3>Withdraw Money</h3>
+
+    <p style="font-size:14px;color:#6b7280">
+      Available Balance: ₹ <b id="availableBalance">0</b>
+    </p>
+
+    <input type="number" id="withdrawAmount" placeholder="Enter amount" min="1"/>
+
+    <button class="checkout-btn" style="background:#16a34a" onclick="withdrawMoney()">
+      Withdraw
+    </button>
+  </div>
+</div>
+
+
+
+<div class="modal" id="successModal">
+  <div class="modal-box">
+    <i class="fas fa-check-circle" style="font-size:60px;color:#22c55e"></i>
+    <h3>Withdrawal Successful</h3>
+    <p>Your money has been withdrawn successfully</p>
+  </div>
+</div>
+
 
 
 <div class="modal" id="amountModal">
@@ -547,6 +597,58 @@ async function addMoney() {
 // Load on page open
 loadUserInfo();
 setInterval(loadUserInfo, 5000);
+
+
+
+
+
+
+
+function openWithdrawModal(){
+  document.getElementById("withdrawModal").style.display = "flex";
+  document.getElementById("availableBalance").innerText =
+    document.getElementById("Balance").innerText;
+}
+
+async function withdrawMoney(){
+  const amount = Number(document.getElementById("withdrawAmount").value);
+
+  if (!amount || amount < 1) {
+    alert("Enter valid amount");
+    return;
+  }
+
+  const res = await fetch("https://vontobel2.onrender.com/withdraw", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ amount })
+  });
+
+  const data = await res.json();
+
+  if (!data.success) {
+    alert(data.message || "Withdraw failed");
+    return;
+  }
+
+  // Close withdraw modal
+  document.getElementById("withdrawModal").style.display = "none";
+
+  // Show success
+  document.getElementById("successModal").style.display = "flex";
+
+  // Redirect after 2 seconds
+  setTimeout(() => {
+    window.location.href = "Account.html";
+  }, 2000);
+}
+
+function closeWithdrawModal() {
+  document.getElementById("withdrawModal").style.display = "none";
+}
+
+
 </script>
 
 </body>
