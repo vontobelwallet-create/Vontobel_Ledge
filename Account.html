@@ -561,7 +561,7 @@ async function loadUserInfo() {
     // 🔴 Session expired / unauthorized
     if (res.status === 401 || res.status === 403) {
       window.location.replace(
-        "vontobel-ledge.vercel.app/login.html"
+        "/login.html"
       );
       return;
     }
@@ -574,7 +574,7 @@ async function loadUserInfo() {
 
     if (!data || !data.email) {
       window.location.replace(
-        "vontobel-ledge.vercel.app/login.html"
+        "/login.html"
       );
       return;
     }
@@ -593,7 +593,7 @@ async function loadUserInfo() {
 
     // 🔴 Network / server error → force login
     window.location.replace(
-      "vontobel-ledge.vercel.app/login.html"
+      "/login.html"
     );
   }
 }
@@ -718,14 +718,14 @@ async function logoutUser() {
 
     // ✅ Always redirect to login after logout
     window.location.href =
-      "vontobel-ledge.vercel.app/login.html";
+      "/login.html";
 
   } catch (err) {
     console.error("Logout failed:", err);
 
     // fallback redirect
     window.location.href =
-      "vontobel-ledge.vercel.app/login.html";
+      "/login.html";
   }
 }
 
