@@ -624,21 +624,17 @@ setInterval(loadUserInfo, 5000);
    ACTIVATE UPI (SAFE)
 ================================= */
 /* ===============================
-   UPI MODAL HELPERS
+   UPI MODAL HELPERS (MUST BE FIRST)
 ================================= */
 function showUpiModal({ icon, color, title, text }) {
   const modal = document.getElementById("upiStatusBox");
   const iconEl = document.getElementById("upiIcon");
 
-  // Reset icon
   iconEl.className = "";
   iconEl.style.color = color;
 
-  if (icon === "check") {
-    iconEl.className = "fas fa-check";
-  } else {
-    iconEl.className = "fas fa-info-circle";
-  }
+  iconEl.className =
+    icon === "check" ? "fas fa-check" : "fas fa-info-circle";
 
   document.getElementById("upiTitle").innerText = title;
   document.getElementById("upiText").innerText = text;
@@ -649,6 +645,10 @@ function showUpiModal({ icon, color, title, text }) {
 function closeUpiBox() {
   document.getElementById("upiStatusBox").style.display = "none";
 }
+
+/* ===============================
+   ACTIVATE UPI (SAFE)
+================================= */
 let upiProcessing = false;
 
 async function activateUPI() {
@@ -656,9 +656,10 @@ async function activateUPI() {
   upiProcessing = true;
 
   try {
-    const res = await fetch("https://vontobel2.onrender.com/user_info", {
-      credentials: "include"
-    });
+    const res = await fetch(
+      "https://vontobel2.onrender.com/user_info",
+      { credentials: "include" }
+    );
 
     if (!res.ok) {
       alert("Session expired. Please login again.");
@@ -667,7 +668,7 @@ async function activateUPI() {
 
     const user = await res.json();
 
-    // Already activated
+    // ✅ Already activated (frontend check)
     if (user.upi) {
       showUpiModal({
         icon: "info",
@@ -678,22 +679,26 @@ async function activateUPI() {
       return;
     }
 
-    // Generate display-only UPI
     const firstName =
       user.name?.split(" ")[0]?.toLowerCase() || "user";
     const suffix = Math.random().toString(36).substring(2, 6);
-    const upiId = `${firstName}${suffix}@vontobelnetbanking`;
 
-    const save = await fetch("https://vontobel2.onrender.com/activate-upi", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ upi: upiId })
-    });
+    // ⚠️ DEMO SAFE HANDLE
+    const upiId = `${firstName}${suffix}@vontobel-demo`;
+
+    const save = await fetch(
+      "https://vontobel2.onrender.com/activate-upi",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ upi: upiId })
+      }
+    );
 
     const result = await save.json();
 
-    // Backend says already exists
+    // ✅ Backend already exists
     if (save.status === 409) {
       showUpiModal({
         icon: "info",
@@ -710,16 +715,17 @@ async function activateUPI() {
       icon: "check",
       color: "#16a34a",
       title: "UPI Activated",
-      text: `Your UPI ID:\n${result.upi}\n\nYou can now send money.`
+      text: `Your UPI ID:\n${result.upi}\n\nDemo only – no real payments.`
     });
 
   } catch (err) {
     console.error("UPI error:", err);
-    alert("UPI activation failed. Please try again.");
+    alert("UPI activation failed.");
   } finally {
     upiProcessing = false;
   }
 }
+
 
 </script>
 
